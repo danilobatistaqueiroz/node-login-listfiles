@@ -1,0 +1,54 @@
+<html>
+<head>
+  <script src="./public/crypto-js.js"></script>
+</head>
+<body>
+	<label for="counter">counter</label><input type="text" id="counter" value=""/>
+	<label for="hash">hash</label><input type="text" id="hash" value=""/>
+	<input type="button" id="gerar" value="gerar"/>
+	<br/>
+	proximo numero:<label for="counter" id="next">1</label><br>
+</body>
+</html>
+
+<script>
+	var gerar = document.getElementById('gerar')
+	
+	gerar.addEventListener('click', function () {
+	
+		this.getRoundedMinutes = function (){
+			var h = (new Date().getMinutes());
+			if(h<10) return  0;
+			if(h>=10 && h<20) return 10;
+			if(h>=20 && h<30) return 20;
+			if(h>=30 && h<40) return 30;
+			if(h>=40 && h<50) return 40;
+			if(h>=50 && h<60) return 50;
+		}
+		
+		this.getRandom = function (){
+			var d = new Date();
+			var d1 = d.getDate();
+			var h = d.getHours();
+			d1 = d1 * 3;
+			h = h * 2;
+			var n = this.getRoundedMinutes();
+			var counter = parseInt(document.getElementById('counter').value);
+			var random = d1 + h + n + counter;
+			return random;
+		}
+		
+		this.getHashFromRandom = function (){
+			var hash = CryptoJS.SHA3(this.getRandom().toString());
+			return hash;
+		}
+	
+    document.getElementById('counter').value = document.getElementById('next').innerHTML;
+		var counter = parseInt(document.getElementById('counter').value);
+    counter++;
+		document.getElementById('hash').value = this.getHashFromRandom();
+		document.getElementById('hash').select();
+		document.execCommand("copy");
+		document.getElementById('next').innerHTML = counter;
+	});
+</script>

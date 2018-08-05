@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Welcome</title>
+    <% include ./partials/head %>
 </head>
-<body>
-	<h1>Welcome to my list of great helping languages</h1>
-	<a href="/login">Login</a>
-	<% if(authenticated){ %>
-		<a href="/logout">Logout</a>
-	<% } %>
+<body class="container">
+
+<header>
+    <% include ./partials/header %>
+</header>
+
+<main>
+    <div class="jumbotron">
+		<h1>a list of great helping books</h1>
+		<input type="hidden" value="<%= values %>" id="values"/>
+    </div>
+</main>
+
 </body>
 </html>

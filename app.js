@@ -1,19 +1,36 @@
-var fs = require('fs');
-var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
-var session = require('express-session');
-var express = require('express'),
-  app = express(),
-  port = process.env.PORT || 3000;
+const fs = require('fs');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const express = require('express');
+const db = require('./db-module.js');
 
-app.listen(port);
+app = express();
 
 app.use(cookieParser());
 app.use(session({ secret: 'example' }));
 app.use(bodyParser());
 app.set('view engine', 'ejs');
+app.use(express.static('public'));
 
-	
-console.log('List of files server started on: ' + port);
+let port = 3000;
 
-require('./routes.js')(app);
+db.connect()
+    .then(() => console.log('database connected'))
+    .then(() => bootApp())
+    .catch((e) => {
+        console.error(e);
+        // Always hard exit on a database connection error
+        //process.exit(1);
+    });
+
+function bootApp(){
+
+  app.listen(port);
+
+  console.log('List of files server started on: ' + port);
+
+  require('./routes/routes.js')(app);
+}
+
+module.exports = app;

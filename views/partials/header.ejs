@@ -1,0 +1,36 @@
+<nav class="navbar navbar-default" role="navigation">
+<div class="container-fluid">
+
+    <div class="navbar-header">
+        <a class="navbar-brand" href="#">
+            <span class="glyphicon glyphicon glyphicon-tree-deciduous"></span>
+            BooksOnline
+        </a>
+
+        <ul class="nav navbar-nav">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+			<li>
+				<a href="/listof">
+					<span class="glyphicon glyphicon-th-list"></span>
+					Archives
+				</a>
+			</li>
+			<li>
+				<% if(authenticated===undefined || authenticated===null || authenticated==false){ %>
+					<a href="/login">
+						<span class="glyphicon glyphicon-user"></span>
+						Login
+					</a>
+				<% } else if(authenticated){ %>
+					<a href="/logout">
+						<span class="glyphicon glyphicon-log-out"></span>
+						Logout
+					</a>
+				<% } %>
+			</li>
+        </ul>
+    </div>
+
+</div>
+</nav>

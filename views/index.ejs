@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>My list of great helping languages</title>
+    <% include ./partials/head %>
 </head>
-<body>
-  <h1>List</h1>
 
-  <ul>
-  <% for(var i=0; i<files.length; i++) {%>
-    <li>
-      <span><a href="ebook?ebookname=<%= files[i] %>"><%= files[i] %></a></span>
-    </li>
-  <% } %>
-  </ul>
+<body class="container">
 
-  <a href="/logout">Logout</a>
+	<header>
+		<% include ./partials/header %>
+	</header>
+
+	<h1>List</h1>
+		Esse sistema foi acessado <%= counter %> vezes
+	<ul>
+	<% for(var i=0; i<files.length; i++) {%>
+		<li>
+			<span><a href="ebook?ebookname=<%= files[i] %>"><%= files[i] %></a></span>
+		</li>
+	<% } %>
+	</ul>
 </body>
 </html>
