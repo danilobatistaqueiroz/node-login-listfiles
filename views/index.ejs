@@ -3,6 +3,13 @@
 
 <head>
     <% include ./partials/head %>
+    <style>
+    table, td {
+      border: 1px solid black;
+      width: 50%;
+    }
+    tr:nth-child(even) {background-color: #f2f2f2;}
+    </style>
 </head>
 
 <body class="container">
@@ -13,12 +20,13 @@
 
 	<h1>List</h1>
 		Esse sistema foi acessado por você <%= counter %> vezes
-	<ul>
+  <table>
 	<% for(var i=0; i<files.length; i++) {%>
-		<li>
-			<span><a href="ebook?ebookname=<%= files[i] %>"><%= files[i] %></a></span>
-		</li>
+    <tr>
+      <td><a href="ebook?ebookname=<%= files[i].facadeName %>"><%= files[i].facadeName %></a></td>
+      <td><%= files[i].description %></td>
+    </tr>
 	<% } %>
-	</ul>
+	</table>
 </body>
 </html>

@@ -2,6 +2,7 @@ const fs = require('fs');
 const CryptoJS = require('../public/crypto-js.js');
 const Crypto = require('../public/crypto.js').Crypto;
 const TokenHash = require('../system/token-hash.js');
+const db = require('../system/db-module.js');
 
 module.exports = function (app) {
     
@@ -11,13 +12,18 @@ module.exports = function (app) {
     
   app.get('/listof', (req, res, next) => {
     var files = fs.readdirSync('./private/');
-    res.render('index.ejs', {authenticated:req.session.authenticated, files:files, counter:req.session.counter});
+    db.get().collection('files').find().toArray((err, result) => {
+      if (err) return console.log(err);
+      res.render('index.ejs', {authenticated:req.session.authenticated, files:result, counter:req.session.counter});
+    });
   });
 
   app.get('/ebook', (req, res, next) => {
-    binary = fs.readFileSync('./private/' + req.query.ebookname);
-    res.attachment(req.query.ebookname);
-    res.send(binary);
+    db.get().collection('files').findOne({facadeName:req.query.ebookname},{originalName:1}, (err, result) => {
+      binary = fs.readFileSync('./private/' + result.originalName);
+      res.attachment(result.originalName);
+      res.send(binary);
+    });
   });
 
   app.get('/welcome', (req, res, next) => {
