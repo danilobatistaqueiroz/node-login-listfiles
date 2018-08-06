@@ -5,7 +5,7 @@ const TokenHash = require('../system/token-hash.js');
 
 module.exports = function (app) {
     
-  app.get('/', (req, res) => {
+  app.get('/', (req, res, next) => {
     res.send("Welcome to list of ebooks!");
   });
     
@@ -14,7 +14,7 @@ module.exports = function (app) {
     res.render('index.ejs', {authenticated:req.session.authenticated, files:files, counter:req.session.counter});
   });
 
-  app.get('/ebook', (req, res) => {
+  app.get('/ebook', (req, res, next) => {
     binary = fs.readFileSync('./private/' + req.query.ebookname);
     res.attachment(req.query.ebookname);
     res.send(binary);
