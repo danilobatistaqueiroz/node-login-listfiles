@@ -7,14 +7,14 @@ module.exports = function (app) {
 
 	app.get('/ebook', controller.ebook)
 
-	app.get('/login', controller.login)
+	app.get('/login', users.login)
 
-	app.post('/loginp', controller.loginp)
+	app.post('/loginp', users.loginp)
 
 	app.get('/welcome', controller.welcome)
 
 	app.get('/', controller.root)
 		
-	app.get('/logout', controller.logout)
+	app.get('/logout', users.logout)
 
 }

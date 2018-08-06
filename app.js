@@ -3,7 +3,8 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const express = require('express');
-const db = require('./db-module.js');
+const db = require('./system/db-module');
+const stats = require('./system/stats');
 
 app = express();
 
@@ -26,11 +27,14 @@ db.connect()
 
 function bootApp(){
 
+  stats.globalCounter();
+  
   app.listen(port);
 
   console.log('List of files server started on: ' + port);
 
-  require('./routes/routes.js')(app);
+  require('./routes/general')(app);
+  require('./routes/users')(app);
 }
 
 module.exports = app;

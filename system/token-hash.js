@@ -1,4 +1,4 @@
-var CryptoJS = require('./public/crypto-js.js');
+var CryptoJS = require('../public/crypto-js');
 
 module.exports = function() {
 	
