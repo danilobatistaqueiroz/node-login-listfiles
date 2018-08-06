@@ -14,6 +14,12 @@ module.exports = function (app) {
     var files = fs.readdirSync('./private/');
     db.get().collection('files').find().toArray((err, result) => {
       if (err) return console.log(err);
+      let i;
+      var crypto = new Crypto(CryptoJS, "segredo123", "segredo123");
+      for(i = 0; i < result.length; i++) {
+     		let plaintext = crypto.decryptByDESModeCBC(result[i].description, "segredo123");
+        result[i].description = plaintext;
+      }
       res.render('index.ejs', {authenticated:req.session.authenticated, files:result, counter:req.session.counter});
     });
   });

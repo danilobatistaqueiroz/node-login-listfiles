@@ -1,0 +1,23 @@
+<html>
+<head>
+  <script src="../public/crypto-js.js"></script>
+  <script> function exports() {}</script>
+  <script src="../public/crypto.js"></script>
+</head>
+<body>
+	<label for="description">description</label><input type="text" id="description" value=""/>
+	<label for="encrypted">encrypted</label><input type="text" id="encrypted" value=""/>
+	<input type="button" id="encriptar" value="encriptar"/>
+</body>
+</html>
+
+<script>
+	var encriptar = document.getElementById('encriptar')
+	
+	encriptar.addEventListener('click', function () {
+    let description = document.getElementById('description').value;
+    var crypto = new Crypto(CryptoJS, "segredo123", "segredo123");
+    let text = crypto.encryptByDESModeCBC(description, "segredo123");	
+		document.getElementById('encrypted').value = text;
+	});
+</script>
