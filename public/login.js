@@ -32,3 +32,4 @@ logar.addEventListener('click', function () {
 	document.getElementById('token').value = identities.token;
 	document.getElementById('enviar').submit();
 })
+

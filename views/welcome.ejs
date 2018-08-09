@@ -13,6 +13,11 @@
     <div class="jumbotron">
 		<h1>a list of great helping books</h1>
 		<input type="hidden" value="<%= values %>" id="values"/>
+    <% if (message) { %>
+      <div class="alert alert-danger">
+        <strong>Ops!</strong> <%=message%>
+      </div>
+    <% } %>
     </div>
 </main>
 

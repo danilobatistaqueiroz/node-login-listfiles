@@ -3,24 +3,37 @@ const CryptoJS = require('../public/crypto-js.js');
 const Crypto = require('../public/crypto.js').Crypto;
 const TokenHash = require('../system/token-hash.js');
 const db = require('../system/db-module.js');
+const util = require('util');
+
+let crypto = new Crypto(CryptoJS, "segredo123", "segredo123");
 
 module.exports = function (app) {
-    
+  
   app.get('/', (req, res, next) => {
-    res.send("Welcome to list of ebooks!");
+    res.send("Welcome to list of ebooks!", {authenticated:req.session.authenticated, message:''});
   });
     
-  app.get('/listof', (req, res, next) => {
-    var files = fs.readdirSync('./private/');
+  app.get('/listof', checkSignIn, (req, res, next) => {
+    let files = fs.readdirSync('./private/');
     db.get().collection('files').find().toArray((err, result) => {
       if (err) return console.log(err);
-      let i;
-      var crypto = new Crypto(CryptoJS, "segredo123", "segredo123");
-      for(i = 0; i < result.length; i++) {
-     		let plaintext = crypto.decryptByDESModeCBC(result[i].description, "segredo123");
-        result[i].description = plaintext;
-      }
       res.render('index.ejs', {authenticated:req.session.authenticated, files:result, counter:req.session.counter});
+    });
+  });
+  
+  app.delete('/ebooks/:id', checkSignIn, 
+  (req, res, next) => {
+    console.log('delete executado '+req.params.id);
+    res.send('{"id":"'+req.params.id+'"}');
+  });
+  
+  app.get('/ebooks', checkSignIn, 
+  (req, res, next) => {
+    let files = fs.readdirSync('./private/');
+    db.get().collection('files').find().toArray((err, result) => {
+      if (err) return console.log(err);
+      result.forEach(decriptar);
+      res.render('list-ebooks.ejs', {authenticated:req.session.authenticated, files:result, counter:req.session.counter});
     });
   });
 
@@ -33,17 +46,27 @@ module.exports = function (app) {
   });
 
   app.get('/welcome', (req, res, next) => {
-    res.render('welcome', {authenticated:req.session.authenticated, values:global.counter});
+    res.render('welcome', {authenticated:req.session.authenticated, values:global.counter, message:''});
   });
 
   function checkSignIn (req, res, next) {
     if(req.session.authenticated){
       next();
     } else {
-      var err = new Error("Not logged in!");
+      let err = new Error("Not logged in!");
       console.log('error trying to access unauthorized page!');
-      res.render('welcome', {authenticated:req.session.authenticated, values:global.counter});
+      res.render('welcome', {authenticated:req.session.authenticated, values:global.counter, message: 'you need to be logged'});
     }
   }
-
+  
+  function decriptar(item){
+      try{
+        let description = item.encDescription;
+        let plaintext = crypto.decryptByDESModeCBC(description, "segredo123");
+        if(plaintext!='')
+          item.originalDescription = plaintext;
+      } catch (e) {
+        console.log(e);
+      }
+    }
 }

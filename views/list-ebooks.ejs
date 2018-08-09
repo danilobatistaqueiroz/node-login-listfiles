@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <% include ./partials/head %>
+  <script src="crypto-js.js"></script>
+	<script> function exports() {}</script>
+	<script src="crypto.js"></script>
+</head>
+
+<body class="container">
+
+	<header>
+		<% include ./partials/header %>
+    <% include ./modals/new-ebooks %>
+	</header>
+  
+  <div class="container">
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1">
+        <p></p>
+        <h1>Lista de ebooks</h1>
+        <p>Uma grande lista de ebooks nos formatos pdf,mobi,epub</p>
+        <p> </p>
+      </div>
+      <div class="col-md-10 col-md-offset-1">
+          <div class="panel panel-default panel-table">
+            <div class="panel-heading">
+              <div class="row">
+                <div class="col col-xs-6">
+                  <h3 class="panel-title"></h3>
+                </div>
+                <div class="col col-xs-6 text-right">
+                  <button id="novo" type="button" class="btn btn-sm btn-primary btn-create" data-id="" data-toggle="modal" data-target="#myModal">Create New</button>
+                </div>
+              </div>
+            </div>
+            <div class="panel-body">
+              <table class="table table-striped table-bordered table-list">
+                <thead>
+                  <tr>
+                      <th><em class="fa fa-cog"></em></th>
+                      <th>File Name</th>
+                      <th>Book Name</th>
+                      <th>Description</th>
+                      <th>Title</th>
+                  </tr> 
+                </thead>
+                <tbody>
+                      <% for(var i=0; i<files.length; i++) {%>
+                        <tr id="<%=files[i]._id%>">
+                          <td align="center">
+                            <a id="edita" class="btn btn-default" data-i="<%=i%>" data-id="<%=files[i]._id%>" data-toggle="modal" data-target="#myModal"><em class="fa fa-pencil"></em></a>
+                            <a class="btn btn-danger" onclick="deletar('<%=files[i]._id%>')"><em class="fa fa-trash"></em></a>
+                          </td>
+                          <td id="originalName<%=i%>"><%= files[i].originalName %></a></td>
+                          <td id="facadeName<%=i%>"><%= files[i].facadeName %></td>
+                          <td id="originalDescription<%=i%>"><%= files[i].originalDescription %></td>
+                          <td id="facadeDescription<%=i%>"><%= files[i].facadeDescription %></td>
+                        </tr>
+                      <% } %>
+                </tbody>
+              </table>
+          
+            </div>
+            <div class="panel-footer">
+              <div class="row">
+                <div class="col col-xs-4">Page 1 of 5
+                </div>
+                <div class="col col-xs-8">
+                  <ul class="pagination hidden-xs pull-right">
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                  </ul>
+                  <ul class="pagination visible-xs pull-right">
+                      <li><a href="#">«</a></li>
+                      <li><a href="#">»</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  <script>
+$(document).on("click", "#edita", function () {
+  var i = $(this).data('i');
+  var myBookId = $(this).data('id');
+  var originalName = $("#originalName"+i).html();
+  var facadeName = $("#facadeName"+i).html();
+  var originalDescription = $("#originalDescription"+i).html();
+  var facadeDescription = $("#facadeDescription"+i).html();
+  $(".modal-body #bookId").val( myBookId );
+  $(".modal-body #originalDescription").val( originalDescription );
+  $(".modal-body #facadeDescription").val( facadeDescription );
+  // As pointed out in comments, 
+  // it is superfluous to have to manually call the modal.
+  // $('#addBookDialog').modal('show');
+});
+$(document).on("click", "#novo", function () {
+     var myBookId = $(this).data('id');
+     $(".modal-body #bookId").val( myBookId );
+  $(".modal-body #originalDescription").val( '' );
+  $(".modal-body #facadeDescription").val( '' );
+     // As pointed out in comments, 
+     // it is superfluous to have to manually call the modal.
+     // $('#addBookDialog').modal('show');
+});
+function deletar(id){
+    fetch('ebooks/'+id, {
+      method: 'delete',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+      })
+    })
+    .then(function (response) {
+      if (response.ok) return response.json()
+    })
+    .then(data => {
+      console.log(data);
+      document.getElementById(data.id).style.display = "none";
+      //window.location.reload()
+    })
+    .catch(function(error) {
+      console.log('There has been a problem with your fetch operation: ' + error.message);
+    });
+}
+  </script>
+</body>
+</html>

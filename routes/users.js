@@ -48,7 +48,10 @@ function userAuthenticated(counter, req, res){
     global.counter++;
     req.session.counter++;
     req.session.authenticated = true;
-    fs.writeFileSync('./counter.txt', req.session.counter);
+    db.get().collection('stats').updateOne(
+        {},
+        { $set: { "counter" : global.counter } }
+    );
     res.redirect('/listof');
   } else {
     console.log('Invalid token');
