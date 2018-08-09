@@ -24,7 +24,7 @@ module.exports = function (app) {
 
   app.get('/logout', (req, res, next) => {
     req.session.authenticated = false;
-    res.render('welcome', {authenticated:req.session.authenticated, values:global.counter});
+    res.render('welcome', {authenticated:req.session.authenticated, values:global.counter, message:''});
   });
 
 }
@@ -33,7 +33,7 @@ function searchUser(req, res){
   db.get().collection('users').find(identities.username).toArray((err, result) => {
     if (err) return console.log(err);
     if (identities.username === 'superuser' && identities.password === 'abc') {
-      userAuthenticated(result[0].counter, req, res);
+      userAuthenticated(global.counter, req, res);
     } else {
       console.log('Username and password are incorrect');
       res.redirect('/login');
